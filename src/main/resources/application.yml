@@ -1,2 +1,8 @@
-server.port=8080
-spring.application.name=EVMitTestTask
+server:
+  port: 8080
+spring:
+  application:
+    name: EVMitTestTask
+telegram:
+  bot:
+    token: ${TELEGRAM_BOT_TOKEN}

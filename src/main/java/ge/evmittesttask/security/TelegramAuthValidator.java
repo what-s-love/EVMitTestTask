@@ -1,5 +1,7 @@
 package ge.evmittesttask.security;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -10,7 +12,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TelegramAuthValidator {
-    //ToDo Пробросить бот-токен из .env через Value
+
+    @Value("${telegram.bot.token}")
     private final String botToken;
 
     public TelegramAuthValidator(String botToken) {
