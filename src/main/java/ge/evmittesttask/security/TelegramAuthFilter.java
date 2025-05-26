@@ -7,12 +7,14 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Map;
 
+@Slf4j
 public class TelegramAuthFilter extends OncePerRequestFilter {
     private final TelegramAuthValidator validator;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -27,7 +29,13 @@ public class TelegramAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain chain
     ) throws ServletException, IOException {
+        log.info("Request URI: {}", request.getRequestURI());
         String initData = request.getHeader("X-Telegram-InitData");
+        if (initData != null) {
+            log.info("Получен заголовок X-Telegram-InitData");
+        } else {
+            log.warn("Отсутствует заголовок X-Telegram-InitData");
+        }
 
         if (initData != null && validator.validate(initData)) {
             Map<String, String> params = validator.parseInitData(initData);

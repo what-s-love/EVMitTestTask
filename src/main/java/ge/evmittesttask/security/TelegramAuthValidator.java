@@ -1,6 +1,8 @@
 package ge.evmittesttask.security;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -11,29 +13,37 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
+@Component
 public class TelegramAuthValidator {
 
     @Value("${telegram.bot.token}")
-    private final String botToken;
-
-    public TelegramAuthValidator(String botToken) {
-        this.botToken = botToken;
-    }
+    private String botToken;
 
     public boolean validate(String initData) {
+        log.info("Начало работы метода валидации данных");
         try {
             Map<String, String> params = parseInitData(initData);
 
             if (!params.containsKey("hash") || !params.containsKey("auth_date")) {
+                log.warn("Нет данных hash или auth_date");
                 return false;
             }
 
             long authDate = Long.parseLong(params.get("auth_date"));
             if (Instant.now().getEpochSecond() - authDate > 86400) {
+                log.warn("auth_date не прошёл проверку");
                 return false;
             }
 
-            return verifySignature(params);
+//            return verifySignature(params);
+            if (verifySignature(params)) {
+                log.info("Подпись прошла верификацию");
+                return true;
+            } else {
+                log.warn("Подпись не прошла верификацию");
+                return false;
+            }
         } catch (Exception e) {
             return false;
         }
@@ -51,6 +61,7 @@ public class TelegramAuthValidator {
     }
 
     private boolean verifySignature(Map<String, String> params) throws NoSuchAlgorithmException, InvalidKeyException {
+        log.info("Начало работы метода верификации подписи");
         String receivedHash = params.get("hash");
         String dataCheckString = params.entrySet().stream()
                 .filter(e -> !e.getKey().equals("hash"))
