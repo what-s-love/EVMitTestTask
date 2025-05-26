@@ -30,9 +30,16 @@ public class TelegramAuthFilter extends OncePerRequestFilter {
             FilterChain chain
     ) throws ServletException, IOException {
         log.info("Request URI: {}", request.getRequestURI());
-        String initData = request.getHeader("X-Telegram-InitData");
-        if (initData != null) {
+
+        String initDataUrl = request.getParameter("tgWebAppData");
+        String initDataHeader = request.getHeader("X-Telegram-InitData");
+
+        String initData = initDataUrl != null ? initDataUrl : initDataHeader;
+
+        if (initDataHeader != null) {
             log.info("Получен заголовок X-Telegram-InitData");
+        } else if (initDataUrl != null) {
+            log.info("Данные получены в параметрах запроса");
         } else {
             log.warn("Отсутствует заголовок X-Telegram-InitData");
         }
