@@ -34,15 +34,14 @@ public class TelegramAuthFilter extends OncePerRequestFilter {
         String initDataUrl = request.getParameter("tgWebAppData");
         String initDataHeader = request.getHeader("X-Telegram-InitData");
 
-        String initData = initDataUrl != null ? initDataUrl : initDataHeader;
-
-        if (initDataHeader != null) {
-            log.info("Получен заголовок X-Telegram-InitData");
-        } else if (initDataUrl != null) {
-            log.info("Данные получены в параметрах запроса");
-        } else {
+        if (initDataHeader == null) {
             log.warn("Отсутствует заголовок X-Telegram-InitData");
         }
+        if (initDataUrl == null) {
+            log.info("Отсуствует tgWebAppData");
+        }
+
+        String initData = initDataUrl != null ? initDataUrl : initDataHeader;
 
         if (initData != null && validator.validate(initData)) {
             Map<String, String> params = validator.parseInitData(initData);
