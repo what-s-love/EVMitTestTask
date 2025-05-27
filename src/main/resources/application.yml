@@ -11,10 +11,10 @@ logging:
     root: info
     org:
       springframework:
-        security: debug
+        security: info
 #      hibernate:
 #        stat: debug
 #        type: trace
 #    sql: trace
-    web: debug
+    web: info
 

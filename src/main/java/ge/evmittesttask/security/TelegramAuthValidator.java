@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -22,8 +23,12 @@ public class TelegramAuthValidator {
 
     public boolean validate(String initData) {
         log.info("Начало работы метода валидации данных");
+        log.info("Получена initData: {}", initData);
         try {
             Map<String, String> params = parseInitData(initData);
+
+            log.info("Список параметров из initData: ");
+            params.forEach((s, s2) -> System.out.println(s + "=" + s2));
 
             if (!params.containsKey("hash") || !params.containsKey("auth_date")) {
                 log.warn("Нет данных hash или auth_date");
@@ -36,7 +41,6 @@ public class TelegramAuthValidator {
                 return false;
             }
 
-//            return verifySignature(params);
             if (verifySignature(params)) {
                 log.info("Подпись прошла верификацию");
                 return true;
@@ -55,7 +59,7 @@ public class TelegramAuthValidator {
                 .filter(kv -> kv.length == 2)
                 .collect(Collectors.toMap(
                         kv -> kv[0],
-                        kv -> kv[1],
+                        kv -> URLDecoder.decode(kv[1], StandardCharsets.UTF_8),
                         (oldVal, newVal) -> newVal
                 ));
     }
@@ -69,30 +73,25 @@ public class TelegramAuthValidator {
                 .map(e -> e.getKey() + "=" + e.getValue())
                 .collect(Collectors.joining("\n"));
 
-        byte[] secretKey = calculate("WebAppData", botToken);
-        String calculatedHash = calculate(dataCheckString, secretKey);
+        byte[] secretKey = calculateBytes("WebAppData", botToken);
+        String calculatedHash = calculateHash(dataCheckString, secretKey);
+        log.info("receivedHash: \n{}", receivedHash);
+        log.info("calculatedHash: \n{}", calculatedHash);
+
         return calculatedHash.equals(receivedHash);
     }
 
-    public static byte[] calculate(String key, String data) throws NoSuchAlgorithmException, InvalidKeyException {
+    public static byte[] calculateBytes(String key, String data) throws NoSuchAlgorithmException, InvalidKeyException {
         Mac mac = Mac.getInstance("HmacSHA256");
         mac.init(new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
         return mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
     }
 
-    public static String calculate(String data, byte[] secretKey) throws NoSuchAlgorithmException, InvalidKeyException {
+    public static String calculateHash(String data, byte[] secretKey) throws NoSuchAlgorithmException, InvalidKeyException {
         Mac mac = Mac.getInstance("HmacSHA256");
         mac.init(new SecretKeySpec(secretKey, "HmacSHA256"));
         byte[] hash = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
-        return bytesToHex(hash);
-    }
-
-    private static String bytesToHex(byte[] bytes) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            sb.append(String.format("%02x", b));
-        }
-        return sb.toString();
+        return HexFormat.of().formatHex(hash);
     }
 
 }

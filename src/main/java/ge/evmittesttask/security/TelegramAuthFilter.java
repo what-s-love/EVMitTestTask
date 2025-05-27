@@ -2,7 +2,6 @@ package ge.evmittesttask.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ge.evmittesttask.model.TelegramUser;
-import ge.evmittesttask.security.TelegramAuthValidator;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.Map;
 
 @Slf4j
@@ -31,21 +31,20 @@ public class TelegramAuthFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         log.info("Request URI: {}", request.getRequestURL());
 
-        String initDataUrl = request.getParameter("tgWebAppData");
-        String initDataHeader = request.getHeader("X-Telegram-InitData");
+        String initData = request.getHeader("X-Telegram-InitData");
 
-        if (initDataHeader == null) {
-            log.warn("Отсутствует заголовок X-Telegram-InitData");
-        }
-        if (initDataUrl == null) {
-            log.info("Отсуствует tgWebAppData");
+        if (initData == null) {
+            initData = request.getParameter("tgWebAppData");
+        } else {
+            initData = URLDecoder.decode(initData);
         }
 
-        String initData = initDataUrl != null ? initDataUrl : initDataHeader;
+        if (initData == null) {
+            log.info("Отсуствует initData");
+        }
 
         if (initData != null && validator.validate(initData)) {
             Map<String, String> params = validator.parseInitData(initData);
-
             if (params.containsKey("user")) {
                 try {
                     TelegramUser user = objectMapper.readValue(

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
     @GetMapping("/")
     public String auth() {
-        log.info("Получен начальный запрос, загрузка index.html");
+        log.info("Получен начальный запрос");
         return "index";
     }
 
