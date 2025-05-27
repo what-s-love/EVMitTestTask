@@ -29,7 +29,7 @@ public class TelegramAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain chain
     ) throws ServletException, IOException {
-        log.info("Request URI: {}", request.getRequestURI());
+        log.info("Request URI: {}", request.getRequestURL());
 
         String initDataUrl = request.getParameter("tgWebAppData");
         String initDataHeader = request.getHeader("X-Telegram-InitData");

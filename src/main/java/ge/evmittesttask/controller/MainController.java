@@ -11,12 +11,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
     @GetMapping("/")
+    public String auth() {
+        log.info("Получен начальный запрос, загрузка index.html");
+        return "index";
+    }
+
+    @GetMapping("main")
     public String home(Authentication authentication, Model model) {
         if (authentication != null && authentication.isAuthenticated()) {
             TelegramUser user = (TelegramUser) authentication.getPrincipal();
             log.info("Аутентифицированный запрос от пользователя {}", user.getUsername());
             model.addAttribute("user", user);
-            return "index";
+            return "main";
         }
         log.info("Неаутентифицированный запрос");
         return "error";
