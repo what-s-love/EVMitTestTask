@@ -18,13 +18,22 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/","/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new TelegramAuthFilter(validator), UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            request.setAttribute("error", "Доступ запрещён");
+                            request.getRequestDispatcher("/error").forward(request, response);
+                        })
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            request.setAttribute("error", "Неаутентифицированный запрос");
+                            request.getRequestDispatcher("/error").forward(request, response);
+                        }))
                 .build();
     }
 }

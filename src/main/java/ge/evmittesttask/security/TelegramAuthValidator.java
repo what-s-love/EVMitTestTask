@@ -1,5 +1,7 @@
 package ge.evmittesttask.security;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Getter
+@Setter
 @Slf4j
 @Component
 public class TelegramAuthValidator {
@@ -60,7 +64,7 @@ public class TelegramAuthValidator {
                 ));
     }
 
-    private boolean verifySignature(Map<String, String> params) throws NoSuchAlgorithmException, InvalidKeyException {
+    public boolean verifySignature(Map<String, String> params) throws NoSuchAlgorithmException, InvalidKeyException {
         log.info("Начало работы метода верификации подписи");
         String receivedHash = params.get("hash");
         String dataCheckString = params.entrySet().stream()

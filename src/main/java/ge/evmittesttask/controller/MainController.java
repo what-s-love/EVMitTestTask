@@ -18,13 +18,9 @@ public class MainController {
 
     @GetMapping("main")
     public String home(Authentication authentication, Model model) {
-        if (authentication != null && authentication.isAuthenticated()) {
             TelegramUser user = (TelegramUser) authentication.getPrincipal();
             log.info("Аутентифицированный запрос от пользователя {}", user.getUsername());
             model.addAttribute("user", user);
             return "main";
-        }
-        log.info("Неаутентифицированный запрос");
-        return "error";
     }
 }

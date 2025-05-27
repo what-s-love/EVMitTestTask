@@ -26,36 +26,10 @@
 
         } catch (error) {
             console.error("Ошибка:", error);
-            document.body.innerHTML = "<p>Ошибка загрузки страницы</p>";
         }
     }
 
     window.addEventListener("DOMContentLoaded", authenticate);
 </script>
-<!--
-    <script>
-        function redirectWhenReady() {
-            if (window.Telegram) {
-                if (window.Telegram.WebApp) {
-                    if (window.Telegram.WebApp.initData) {
-                        const initData = window.Telegram.WebApp.initData;
-                        const targetUrl = "main?tgWebAppData=" + encodeURIComponent(initData);
-                        window.location.replace(targetUrl);
-                    } else {
-                        console.log("window.Telegram.WebApp.initData не найден")
-                    }
-                } else {
-                    console.log("window.Telegram.WebApp не найден")
-                }
-            } else {
-                console.log("window.Telegram не найден")
-                console.log("Инициализация повторной попытки")
-                setTimeout(redirectWhenReady, 100);
-            }
-        }
-
-        redirectWhenReady();
-    </script>
--->
 </body>
 </html>
