@@ -61,8 +61,10 @@ public class TelegramAuthFilter extends OncePerRequestFilter {
                             )
                     );
                 } catch (Exception e) {
-                    //ToDo Логирование ошибки + выброс до обработчика
+                    log.error("Ошибка маппинга TelegramUser: {}", e.getMessage());
                 }
+            } else {
+                log.error("Params не содержит user");
             }
         }
 

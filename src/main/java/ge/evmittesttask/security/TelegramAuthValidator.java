@@ -26,9 +26,6 @@ public class TelegramAuthValidator {
         try {
             Map<String, String> params = parseInitData(initData);
 
-            log.info("Список параметров из initData: ");
-            params.forEach((s, s2) -> System.out.println(s + "=" + s2));
-
             if (!params.containsKey("hash") || !params.containsKey("auth_date")) {
                 log.warn("Нет данных hash или auth_date");
                 return false;

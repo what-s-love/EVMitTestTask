@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Telegram user info</title>
-    <script src="https://telegram.org/js/telegram-web-app.js?57"></script>
-
 </head>
 <body>
 <h1>Your Telegram Data</h1>
 <div th:if="${user}">
-    <img src="${user.photoUrl}" alt="Photo">
     <p>ID: <span th:text="${user.id}"></span></p>
     <p>First Name: <span th:text="${user.firstName}"></span></p>
     <p>Last Name: <span th:text="${user.lastName}"></span></p>
