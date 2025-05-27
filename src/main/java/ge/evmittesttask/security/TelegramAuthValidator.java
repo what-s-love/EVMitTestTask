@@ -23,7 +23,6 @@ public class TelegramAuthValidator {
 
     public boolean validate(String initData) {
         log.info("Начало работы метода валидации данных");
-        log.info("Получена initData: {}", initData);
         try {
             Map<String, String> params = parseInitData(initData);
 
@@ -75,7 +74,6 @@ public class TelegramAuthValidator {
 
         byte[] secretKey = calculateBytes("WebAppData", botToken);
         String calculatedHash = calculateHash(dataCheckString, secretKey);
-        log.info("receivedHash: \n{}", receivedHash);
         log.info("calculatedHash: \n{}", calculatedHash);
 
         return calculatedHash.equals(receivedHash);

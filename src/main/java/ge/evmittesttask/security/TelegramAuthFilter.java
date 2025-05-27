@@ -36,6 +36,7 @@ public class TelegramAuthFilter extends OncePerRequestFilter {
         if (initData == null) {
             initData = request.getParameter("tgWebAppData");
         } else {
+            log.info("Encoded initData: {}", initData);
             initData = URLDecoder.decode(initData);
         }
 
