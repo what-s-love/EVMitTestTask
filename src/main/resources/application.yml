@@ -6,3 +6,15 @@ spring:
 telegram:
   bot:
     token: ${TELEGRAM_BOT_TOKEN}
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        security: debug
+#      hibernate:
+#        stat: debug
+#        type: trace
+#    sql: trace
+    web: debug
+
