@@ -18,6 +18,7 @@ FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 COPY --from=java-builder /app/target/*.jar app.jar
-COPY --from=frontend-builder /app/src/main/resources/static/css/tailwind.css /app/resources/static/css/tailwind.css
+COPY --from=frontend-builder /app/frontend/dist/tailwind.css /app/resources/static/css/tailwind.css
 
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

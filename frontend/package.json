@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "1.0.0",
   "scripts": {
-    "build": "npx tailwindcss -i ./src/input.css -o ../src/main/resources/static/css/tailwind.css --minify",
+    "build": "npx tailwindcss -i ./src/input.css -o ./dist/tailwind.css --minify",
     "watch": "npx tailwindcss -i ./src/input.css -o ../src/main/resources/static/css/tailwind.css --watch"
   },
   "devDependencies": {
