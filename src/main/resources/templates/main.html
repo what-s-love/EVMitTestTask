@@ -2,16 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram user info</title>
+    <link href="/css/style.css" rel="stylesheet">
 </head>
-<body>
-<h1>Your Telegram Data</h1>
-<div th:if="${user}">
-    <p>ID: <span th:text="${user.id}"></span></p>
-    <p>First Name: <span th:text="${user.firstName}"></span></p>
-    <p>Last Name: <span th:text="${user.lastName}"></span></p>
-    <p>Username: <span th:text="${user.username}"></span></p>
-    <p>Language Code: <span th:text="${user.languageCode}"></span></p>
+<body class="bg-gray-50 min-h-screen p-6">
+<div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-6">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Your Telegram Data</h1>
+    <div th:if="${user}" class="space-y-4">
+        <div class="flex items-center">
+            <span class="text-gray-600 font-medium w-32">ID:</span>
+            <span th:text="${user.id}" class="text-gray-800"></span>
+        </div>
+        <div class="flex items-center">
+            <span class="text-gray-600 font-medium w-32">First Name:</span>
+            <span th:text="${user.firstName}" class="text-gray-800"></span>
+        </div>
+        <div class="flex items-center">
+            <span class="text-gray-600 font-medium w-32">Last Name:</span>
+            <span th:text="${user.lastName}" class="text-gray-800"></span>
+        </div>
+        <div class="flex items-center">
+            <span class="text-gray-600 font-medium w-32">Username:</span>
+            <span th:text="${user.username}" class="text-gray-800"></span>
+        </div>
+        <div class="flex items-center">
+            <span class="text-gray-600 font-medium w-32">Language Code:</span>
+            <span th:text="${user.languageCode}" class="text-gray-800"></span>
+        </div>
+    </div>
 </div>
 </body>
 </html>
