@@ -77,7 +77,7 @@ TELEGRAM_BOT_TOKEN=1234567890:AABB1aBCdEfJKlMNOPQRstuVw2xWoSsEucM
 
 ---
 
-### 🏃 3. Запуск приложения
+### 🏃 2. Запуск приложения
 
 Сборка:
 
@@ -113,7 +113,7 @@ TELEGRAM_BOT_TOKEN=1234567890:AABB1aBCdEfJKlMNOPQRstuVw2xWoSsEucM
 
 ---
 
-### 🏃 3. Запуск приложения
+### 🏃 2. Запуск приложения
 
 Локальный запуск:
 
